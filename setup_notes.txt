@@ -1,0 +1,25 @@
+1. for autogenerating and modifying use albemic
+
+>run it once:
+pip install alembic
+alembic init alembic
+
+>in alembic/env.py
+
+from models.base_model import Base
+target_metadata = Base.metadata
+
+> in albemic/versions/ create a python file to run a modification query (1 file for 1 script in sequence)
+class Product(Base):
+    offers = Column(JSON)
+
+> generate migration
+alembic revision --autogenerate -m "add offers column"
+
+> apply migration
+alembic upgrade head
+
+> Rollback if needed
+alembic downgrade -1
+
+> in alembic.ini file modify the sqlalchemy.url with your database connection url
